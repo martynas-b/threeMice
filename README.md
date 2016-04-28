@@ -1,2 +1,2 @@
 # threeMice
-Small javascript library for mouse events in three.js 3D world. (COMING SOON)
+Small javascript library for mouse events in [three.js] (https://github.com/mrdoob/three.js) 3D world. (COMING SOON)
