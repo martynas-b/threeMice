@@ -1,6 +1,6 @@
 /**
  * 
- * @version 1.01
+ * @version 0.1.0
  * @author  Martynas Beinoras, https://github.com/martynas-b
  *
  */
