@@ -17,3 +17,8 @@ Under development
 Simple ThreeMice mouseover and mouseout events example:
 
 [threeMice_mouseover.html] (examples/threeMice_mouseover.html)
+
+## Releases
+
+### v1.0.0 (May 2, 2016)
+* Initial release
