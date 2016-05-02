@@ -44,8 +44,12 @@
 				var cube2 = new THREE.Mesh(geometry, material2);
 				cube2.position.x = 5;
 				
-				mouse.set(cube2).on("mouseover", cubeMouseOver);
-				mouse.set(cube2).on("mouseout", cubeMouseOut);
+				mouse.set(cube2).on("mouseover", function (object) {
+					object.rotateY = true;
+				});
+				mouse.set(cube2).on("mouseout", function (object) {
+					object.rotateY = false;
+				});
 				
 				scene.add(cube2);
 				
@@ -54,7 +58,9 @@
 					renderer.render(scene, camera);
 					
 					cube1.rotation.x += 0.01;
-					cube2.rotation.y += 0.01;
+					if (cube2.rotateY === true) {
+						cube2.rotation.y += 0.01;
+					}
 				};
 				
 				render();
