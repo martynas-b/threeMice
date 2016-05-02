@@ -20,5 +20,5 @@ Simple ThreeMice mouseover and mouseout events example:
 
 ## Releases
 
-### v1.0.0 (May 2, 2016)
+### v1.0.1 (May 2, 2016)
 * Initial release
