@@ -58,10 +58,3 @@ Simple ThreeMice mouseover and mouseout events example:
 
 [threeMice_mouseover.html] (examples/threeMice_mouseover.html)
 
-## Releases
-
-### v1.1.0 (May 3, 2016)
-* Changed required constructor properties
-
-### v1.0.2 (May 2, 2016)
-* Initial release (updated versions)
