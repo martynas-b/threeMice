@@ -8,7 +8,7 @@
 			body {margin: 0; overflow: hidden}
 		</style>
 		<script src="../three/r76/three.min.js"></script>
-		<script src="../build/threeMice.min.js"></script>
+		<script src="../dev/threeMice.js"></script>
 		<script>
 			var scene = null;
 			var renderer = null;
@@ -26,8 +26,9 @@
 				camera.position.z = 10;
 				
 				var mouse = new ThreeMice.Mouse({
+					renderer: renderer,
 					camera: camera,
-					object3d: scene
+					scene: scene
 				});
 				
 				var geometry = new THREE.BoxGeometry(1, 1, 1);
