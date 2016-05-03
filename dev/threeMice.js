@@ -1,6 +1,6 @@
 /**
  * 
- * @version 1.0.2
+ * @version 1.0.3
  * @author  Martynas Beinoras, https://github.com/martynas-b
  *
  */
@@ -39,11 +39,12 @@ ThreeMice.hasMouseOut = function (aObj) {
 
 ThreeMice.Mouse = function (aOpt) {
 	var self = this;
-	this.container = document.body;
+	this.container = null;
 	this.offset = {top: 0, left: 0};
 	this.size = {width: 0, height: 0};
+	this.renderer = null;
 	this.camera = null;
-	this.object3d = null;
+	this.scene = null;
 	this.recursive = false;
 	this.mouse = { position: {x: -1, y: -1}, /*clickedId: null, down: false,*/ intersected: null };
 	this.enabled = true;
@@ -51,38 +52,28 @@ ThreeMice.Mouse = function (aOpt) {
 		
 	function initOptions (aOpt) {
 		if (aOpt) {
-			if (aOpt.container) {
-				self.container = aOpt.container;
+			if (aOpt.renderer) {
+				self.renderer = aOpt.renderer;
 				
-				if (self.container !== document.body) {
+				var parentNode = self.renderer.domElement.parentNode;
+				if (parentNode) {
+					self.container = parentNode;
 					self.offset = self.container.getBoundingClientRect();
-				}
-			}
-			if (aOpt.size) {
-				self.size = aOpt.size;
-			}
-			else {
-				if (self.container === document.body) {
-					self.size.width = window.innerWidth;
-					self.size.height = window.innerHeight;
-				}
-				else {
-					self.size.width = self.container.clientWidth;
-					self.size.height = self.container.clientHeight;
+					self.size = self.renderer.getSize();
 				}
 			}
 			if (aOpt.camera) {
 				self.camera = aOpt.camera;
 			}
-			if (aOpt.object3d) {
-				self.object3d = aOpt.object3d;
+			if (aOpt.scene) {
+				self.scene = aOpt.scene;
 			}
 			if (aOpt.recursive) {
 				self.recursive = aOpt.recursive;
 			}
 		}
 	}
-	
+		
 	function setMousePosition (event) {		
 		self.mouse.position.x = ((event.clientX - self.offset.left + document.body.scrollLeft) / self.size.width) * 2 - 1;
 		self.mouse.position.y = - ((event.clientY - self.offset.top + document.body.scrollTop) / self.size.height) * 2 + 1;
@@ -144,7 +135,7 @@ ThreeMice.Mouse = function (aOpt) {
 		
 		var ray = new THREE.Raycaster( self.camera.position, vector.sub( self.camera.position ).normalize() );
 		
-		var intersects = ray.intersectObjects( self.object3d.children, self.recursive );
+		var intersects = ray.intersectObjects( self.scene.children, self.recursive );
 		
 		if ( intersects.length > 0 ) {
 			object = intersects[ 0 ].object;
@@ -179,17 +170,20 @@ ThreeMice.Mouse = function (aOpt) {
 		
 	function init (aOpt) {
 		initOptions(aOpt);
-		
-		if (self.camera && self.object3d) {
+						
+		if (self.container && self.camera && self.scene) {
 			initMouseEvents();
 		}
 		else {
 			self.enabled = false;
+			if (!self.container) {
+				ThreeMice.log("Renderer was not defined or is not appended to DOM.");
+			}
 			if (!self.camera) {
 				ThreeMice.log("Camera was not defined.");
 			}
-			if (!self.object3d) {
-				ThreeMice.log("Object3D was not defined.");
+			if (!self.scene) {
+				ThreeMice.log("Scene was not defined.");
 			}
 		}				
 	}
