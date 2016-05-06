@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>ThreeMice mouse click</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<style>
+			body {margin: 0; overflow: hidden}
+		</style>
+		<script src="../three/r76/three.min.js"></script>
+		<script src="../three/r76/OrbitControls.js"></script>
+		<script src="../build/threeMice.min.js"></script>
+		<script>
+			var scene = null;
+			var renderer = null;
+			var camera = null;
+			var size = {width: window.innerWidth, height: window.innerHeight};
+					
+			function initScene () {
+				scene = new THREE.Scene();
+				renderer = new THREE.WebGLRenderer();
+				renderer.setSize(size.width, size.height);
+				document.body.appendChild(renderer.domElement);
+				
+				camera = new THREE.PerspectiveCamera(45, size.width / size.height, 0.1, 1000);
+				camera.position.z = 10;
+				
+				var controls = new THREE.OrbitControls( camera, renderer.domElement);	
+				controls.enableZoom = false;
+				controls.target.set(0,0,0);
+				
+				var mouse = new ThreeMice.Mouse({
+					renderer: renderer,
+					camera: camera,
+					scene: scene
+				});				
+				
+				var geometry1 = new THREE.BoxGeometry(1, 1, 1);
+				var material1 = new THREE.MeshBasicMaterial({ color: "hsl(0, 100%, 50%)" });
+				var cube1 = new THREE.Mesh(geometry1, material1);
+				cube1.position.x = -2;
+				
+				mouse.set(cube1).on("mouseclick", cubeMouseClick);
+				
+				scene.add(cube1);
+				
+				var geometry2 = new THREE.SphereBufferGeometry( 1, 32, 32 );
+				var material2 = new THREE.MeshBasicMaterial({ color: 0x00ff00});
+				var sphere = new THREE.Mesh(geometry2, material2);
+				sphere.position.x = 2;
+				
+				mouse.set(sphere).on("mouseclick", function (object) {
+					var scale = object.scale.x + 0.1;
+					if (scale > 2) {
+						scale = 1;
+					}
+					
+					object.scale.x = scale;
+					object.scale.y = scale;
+					object.scale.z = scale;
+				});
+				
+				scene.add(sphere);
+				
+				var render = function () {
+					requestAnimationFrame(render);								
+					renderer.render(scene, camera);
+					
+					cube1.rotation.x += 0.01;
+				};
+				
+				render();
+			}
+			
+			function cubeMouseClick (object) {
+				var hsl = object.material.color.getHSL();
+				object.material.color.setHSL(hsl.h + 0.3, hsl.s, hsl.l);
+			}
+		</script>
+	</head>
+	<body onload="initScene()">
+	</body>
+</html>
